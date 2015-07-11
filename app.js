@@ -32,6 +32,34 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Setup config
 extend(raneto.config, config);
 
+app.all('/api*', function(req, res) {
+    var slug = req.params[0];
+    if(slug == '/' || slug == '') slug = '/index';
+
+    var pageList = raneto.getPages(slug),
+        filePath = path.normalize(raneto.config.content_dir + slug);
+    if(!fs.existsSync(filePath)) filePath += '.md';
+
+    if(slug == '/index' && !fs.existsSync(filePath)){
+        return res.json({source: raneto.config.site_title, slug: slug, pages: pageList});
+    } else {
+        fs.readFile(filePath, 'utf8', function(err, content) {
+            if(err){
+                err.status = '404';
+                err.message = 'Whoops. Looks like this page doesn\'t exist.';
+                return res.status(404).json(err);
+            }
+
+            if(path.extname(filePath) == '.md'){
+                res.json({source: raneto.config.site_title, slug: slug, content: content});
+            } else {
+                // Serve static file
+                res.sendfile(filePath);
+            }
+        });
+    }
+});
+
 // Handle all requests
 app.all('*', function(req, res, next) {
     if(req.query.search){
@@ -99,6 +127,7 @@ app.all('*', function(req, res, next) {
         next();
     }
 });
+
 
 // Handle any errors
 app.use(function(err, req, res, next) {
