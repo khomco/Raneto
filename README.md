@@ -3,6 +3,12 @@ Raneto
 
 [Raneto](http://raneto.com) is a free, open, simple Markdown powered Knowledgebase for Nodejs. [Find out more &rarr;](http://docs.raneto.com/what-is-raneto)
 
+khomco/Raneto Contribution
+------------
+My goal is to implement multiple roles for Raneto to be run.  One role, the current role of Raneto, is for a single instance of a knowledge base tied to a
+single isolated group of content.  The second role, which I hope to implement, is an aggregator which will consume the content of a distributed set
+of single instance Raneto installs. This comes from a need for an organization where there are a disparate set of teams with their own knowledge base needs (private/public, hosted in their own repo) and yet create an ecosystem where teams can learn about the other's products/services without bothering them with emails, IMs, incident tickets, etc.
+
 Requirements
 ------------
 
