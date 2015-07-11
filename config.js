@@ -30,7 +30,13 @@ var config = {
 	content_dir: './content/',
 
 	// Add your analytics tracking code (including script tags)
-	analytics: ""
+	analytics: "",
+
+    // Specify the path of folder where all your knowledgebase providers are located
+    provider_dir: './providers/',
+
+    // Provider ID will act as a slug for retrieving data from this instance
+    provider_id: ""
 
 };
 

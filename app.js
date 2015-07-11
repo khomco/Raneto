@@ -41,7 +41,9 @@ app.all('/api*', function(req, res) {
     if(!fs.existsSync(filePath)) filePath += '.md';
 
     if(slug == '/index' && !fs.existsSync(filePath)){
-        return res.json({source: raneto.config.site_title, slug: slug, pages: pageList});
+        pageList.done(function(data) {
+            return res.json({provider: raneto.config.provider_id, slug: slug, pages: data});
+        });
     } else {
         fs.readFile(filePath, 'utf8', function(err, content) {
             if(err){
@@ -51,7 +53,7 @@ app.all('/api*', function(req, res) {
             }
 
             if(path.extname(filePath) == '.md'){
-                res.json({source: raneto.config.site_title, slug: slug, content: content});
+                res.json({provider: raneto.config.provider_id, slug: slug, content: content});
             } else {
                 // Serve static file
                 res.sendfile(filePath);
@@ -84,10 +86,12 @@ app.all('*', function(req, res, next) {
         if(!fs.existsSync(filePath)) filePath += '.md';
 
         if(slug == '/index' && !fs.existsSync(filePath)){
-            return res.render('home', {
-                config: config,
-                pages: pageList,
-                body_class: 'page-home'
+            pageList.done(function(data) {
+                return res.render('home', {
+                    config: config,
+                    pages: data,
+                    body_class: 'page-home'
+                });
             });
         } else {
             fs.readFile(filePath, 'utf8', function(err, content) {
